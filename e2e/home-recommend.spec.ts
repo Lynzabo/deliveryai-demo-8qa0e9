@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test'
  *
  * 覆盖 Spec SPEC-HOME-RECO-001 / REQ-001：
  * - 推荐菜区域展示带 badge 的 4 款菜品（图片、名称、价格、徽章）
- * - 推荐菜区域位于品牌标题与桌台绑定区之间，首屏可见
+ * - 推荐菜区域位于品牌标题与桌台绑定区之间，移动端首屏可见
  * - 推荐菜卡片不响应点击，不触发导航
  */
 
@@ -33,7 +33,9 @@ test.describe('首页推荐菜展示 - E2E 验收测试', () => {
     }
   })
 
-  test('REQ-001.2: 推荐菜区域位于品牌标题与桌台绑定区之间且首屏可见', async ({ page }) => {
+  test('REQ-001.2/.4: 推荐菜区域位于品牌标题与桌台绑定区之间且移动端首屏可见', async ({ page }) => {
+    // 移动端视口：单列布局，品牌标题 → 推荐菜 → 桌台绑定纵向排列
+    await page.setViewportSize({ width: 375, height: 812 })
     await page.goto('/')
 
     const brandTitle = page.getByRole('heading', { name: /热气升腾/ })
@@ -44,16 +46,16 @@ test.describe('首页推荐菜展示 - E2E 验收测试', () => {
     await expect(recommendHeading).toBeVisible()
     await expect(bindButton).toBeVisible()
 
-    // 推荐菜区域在品牌标题之后、桌台绑定区之前（基于 DOM 坐标顺序）
+    // 单列布局下：品牌标题 → 推荐菜 → 桌台绑定（基于纵向坐标顺序）
     const brandY = (await brandTitle.boundingBox()).y
     const recommendY = (await recommendHeading.boundingBox()).y
     const bindY = (await bindButton.boundingBox()).y
     expect(brandY).toBeLessThan(recommendY)
     expect(recommendY).toBeLessThan(bindY)
 
-    // 推荐菜区域在默认桌面视口（1280x720）首屏可见（无需滚动）
+    // 推荐菜区域在移动端首屏可见（无需向下滚动即可看到至少部分推荐菜内容）
     expect(recommendY).toBeGreaterThanOrEqual(0)
-    expect(recommendY).toBeLessThan(720)
+    expect(recommendY).toBeLessThan(812)
   })
 
   test('REQ-001.5: 推荐菜卡片不响应点击，不触发导航或弹窗', async ({ page }) => {
