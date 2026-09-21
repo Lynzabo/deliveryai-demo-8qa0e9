@@ -19,7 +19,7 @@ interface HomeViewProps { onBind: (table: string) => void }
 export function HomeView({ onBind }: HomeViewProps) {
   const { t } = useTranslation()
   return (
-    <main className="relative min-h-screen overflow-hidden bg-rice-100 paper-noise">
+    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-rice-100 paper-noise">
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-chili-100 blur-3xl" />
       <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-amber-100 blur-3xl" />
       <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-5 py-10 lg:grid-cols-2 lg:px-10">
@@ -87,6 +87,9 @@ export function HomeView({ onBind }: HomeViewProps) {
           <Button onClick={() => onBind('A08')} className="mt-4 w-full"><MapPin size={17} />{t('bind.quick_enter')}</Button>
         </section>
       </div>
+      <footer className="relative mx-auto w-full max-w-6xl px-5 py-4 text-center text-xs text-charcoal-400 lg:px-10">
+        {t('common.copyright')}
+      </footer>
     </main>
   )
 }
