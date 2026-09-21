@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { Check, ChevronRight, MapPin, QrCode, Sparkles, Users } from 'lucide-react'
 import hotpot from '@/assets/hotpot.jpg'
 import { Button } from '@/components/ui/button'
+import { money } from '@/lib/utils'
+import { products } from '@/data/menu'
 
 const tableOptions = [
   { code: 'A08', areaKey: 'bind.area.hall', seats: 4 },
@@ -9,6 +11,8 @@ const tableOptions = [
   { code: 'C06', areaKey: 'bind.area.room', seats: 4 },
   { code: 'D03', areaKey: 'bind.area.window', seats: 6 },
 ]
+
+const recommendedProducts = products.filter((p) => p.badge)
 
 interface HomeViewProps { onBind: (table: string) => void }
 
@@ -19,21 +23,43 @@ export function HomeView({ onBind }: HomeViewProps) {
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-chili-100 blur-3xl" />
       <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-amber-100 blur-3xl" />
       <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-5 py-10 lg:grid-cols-2 lg:px-10">
-        <section className="animate-rise">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-chili-500/20 bg-white/80 px-3 py-2 text-xs font-bold text-chili-600 shadow-sm">
-            <Sparkles size={14} /> {t('common.concept_badge')}
-          </div>
-          <p className="mb-3 text-sm font-bold tracking-widest text-chili-500">{t('common.concept_en')}</p>
-          <h1 className="max-w-xl text-4xl font-extrabold leading-tight text-charcoal-900 sm:text-5xl lg:text-6xl">
-            {t('bind.title_l1')}<br /><span className="text-chili-500">{t('bind.title_l2')}</span>
-          </h1>
-          <p className="mt-5 max-w-lg text-base leading-7 text-charcoal-500">{t('bind.desc')}</p>
-          <div className="mt-7 flex flex-wrap gap-3 text-sm text-charcoal-700">
-            {[t('bind.feature1'), t('bind.feature2'), t('bind.feature3')].map((item) => (
-              <span key={item} className="flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm"><Check size={15} className="text-chili-500" />{item}</span>
-            ))}
-          </div>
-        </section>
+        <div className="flex flex-col gap-7">
+          <section className="animate-rise">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-chili-500/20 bg-white/80 px-3 py-2 text-xs font-bold text-chili-600 shadow-sm">
+              <Sparkles size={14} /> {t('common.concept_badge')}
+            </div>
+            <p className="mb-3 text-sm font-bold tracking-widest text-chili-500">{t('common.concept_en')}</p>
+            <h1 className="max-w-xl text-4xl font-extrabold leading-tight text-charcoal-900 sm:text-5xl lg:text-6xl">
+              {t('bind.title_l1')}<br /><span className="text-chili-500">{t('bind.title_l2')}</span>
+            </h1>
+            <p className="mt-5 max-w-lg text-base leading-7 text-charcoal-500">{t('bind.desc')}</p>
+            <div className="mt-7 flex flex-wrap gap-3 text-sm text-charcoal-700">
+              {[t('bind.feature1'), t('bind.feature2'), t('bind.feature3')].map((item) => (
+                <span key={item} className="flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm"><Check size={15} className="text-chili-500" />{item}</span>
+              ))}
+            </div>
+          </section>
+
+          {recommendedProducts.length > 0 && (
+            <section className="animate-rise">
+              <h2 className="mb-3 text-lg font-extrabold text-charcoal-900">{t('bind.recommend_title')}</h2>
+              <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-2 snap-x">
+                {recommendedProducts.map((product) => (
+                  <div key={product.id} className="w-36 shrink-0 snap-start rounded-2xl border border-charcoal-900/10 bg-white p-2 shadow-sm">
+                    <div className="relative mb-2 h-24 overflow-hidden rounded-xl">
+                      <img src={product.image} alt={t(product.name)} className="h-full w-full object-cover" />
+                      {product.badge && (
+                        <span className="absolute left-2 top-2 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-extrabold text-charcoal-900">{t(product.badge)}</span>
+                      )}
+                    </div>
+                    <h3 className="line-clamp-1 text-sm font-bold text-charcoal-900">{t(product.name)}</h3>
+                    <p className="mt-1 text-base font-extrabold text-chili-500">{money(product.price)}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
 
         <section className="animate-rise rounded-3xl border border-white/80 bg-white/90 p-4 shadow-float backdrop-blur sm:p-6">
           <div className="relative mb-6 h-48 overflow-hidden rounded-2xl sm:h-56">
