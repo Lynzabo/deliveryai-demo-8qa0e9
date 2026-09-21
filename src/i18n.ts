@@ -43,6 +43,7 @@ const resources = {
         preview_message: '预览模式 · 已绑定 A08 桌',
         welcome_message: '欢迎进入概念演示',
         unknown_area: '',
+        copyright: '© 概念演示 2026 版权所有',
       },
       bind: {
         title_l1: '热气升腾，',
@@ -282,6 +283,7 @@ const resources = {
         preview_message: 'Preview mode · Table A08 bound',
         welcome_message: 'Welcome to the concept demo',
         unknown_area: '',
+        copyright: '© Concept Demo 2026. All rights reserved.',
       },
       bind: {
         title_l1: 'Steam rising,',
