@@ -44,14 +44,16 @@ test.describe('首页推荐菜展示 - E2E 验收测试', () => {
     await expect(recommendHeading).toBeVisible()
     await expect(bindButton).toBeVisible()
 
-    // 推荐菜区域在品牌标题之后、桌台绑定区之前（基于 DOM 顺序）
-    expect(await brandTitle.boundingBox().y).toBeLessThan(await recommendHeading.boundingBox().y)
-    expect(await recommendHeading.boundingBox().y).toBeLessThan(await bindButton.boundingBox().y)
+    // 推荐菜区域在品牌标题之后、桌台绑定区之前（基于 DOM 坐标顺序）
+    const brandY = (await brandTitle.boundingBox()).y
+    const recommendY = (await recommendHeading.boundingBox()).y
+    const bindY = (await bindButton.boundingBox()).y
+    expect(brandY).toBeLessThan(recommendY)
+    expect(recommendY).toBeLessThan(bindY)
 
     // 推荐菜区域在默认桌面视口（1280x720）首屏可见（无需滚动）
-    const recommendBox = await recommendHeading.boundingBox()
-    expect(recommendBox.y).toBeGreaterThanOrEqual(0)
-    expect(recommendBox.y).toBeLessThan(720)
+    expect(recommendY).toBeGreaterThanOrEqual(0)
+    expect(recommendY).toBeLessThan(720)
   })
 
   test('REQ-001.5: 推荐菜卡片不响应点击，不触发导航或弹窗', async ({ page }) => {
